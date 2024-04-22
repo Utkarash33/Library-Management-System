@@ -7,7 +7,7 @@ import java.util.List;
 
 
 public interface RedisRepo extends CrudRepository<Book, String> {
-    List<Book> findByTitleContainingIgnoreCaseOrAuthorContainingIgnoreCase(String title, String author);
+    List<Book> searchByTitleIgnoreCaseAndAuthorIgnoreCase(String title, String author);
     Book findById(long id);
-    List<Book> findByTitleContainingIgnoreCase(String title);
+    List<Book> findByTitle(String title);
 }

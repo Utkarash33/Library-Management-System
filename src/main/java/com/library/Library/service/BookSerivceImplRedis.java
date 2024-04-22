@@ -5,20 +5,22 @@ import com.library.Library.repository.BookRepository;
 import com.library.Library.repository.RedisRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Objects;
 
 @Service
 @ConditionalOnProperty(name ="db_flag", havingValue = "redis")
 public class BookSerivceImplRedis implements BookService{
     @Autowired
     private RedisRepo bookRepository;
-
     @Override
     public String addBook(Book book) {
 
-        if(bookRepository.findByTitleContainingIgnoreCaseOrAuthorContainingIgnoreCase(book.getTitle(),book.getAuthor())!=null)
+        List<Book> book2 = bookRepository.searchByTitleIgnoreCaseAndAuthorIgnoreCase(book.getTitle(),book.getAuthor());
+        if(book2.size()!=0)
         {
             throw new IllegalArgumentException("Book already exists");
         }
@@ -65,10 +67,10 @@ public class BookSerivceImplRedis implements BookService{
 
     @Override
     public List<Book> searchBooks(String query) {
-        List<Book> listOfBooks = bookRepository.findByTitleContainingIgnoreCase(query);
+        List<Book> listOfBooks = bookRepository.findByTitle(query);
 
         System.out.println(listOfBooks);
-        if(listOfBooks==null || listOfBooks.size()==0)
+        if(listOfBooks.size()==0)
         {
             throw new IllegalArgumentException("No book found with "+query);
         }
