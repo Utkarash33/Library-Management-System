@@ -1,10 +1,12 @@
 package com.library.Library.entities;
 import lombok.*;
+import org.springframework.data.redis.core.RedisHash;
 
 @NoArgsConstructor
 @Getter
 @Setter
 @AllArgsConstructor
+@RedisHash("books")
 public class Book {
 
 

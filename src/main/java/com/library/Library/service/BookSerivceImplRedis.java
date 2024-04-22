@@ -5,27 +5,25 @@ import com.library.Library.repository.BookRepository;
 import com.library.Library.repository.RedisRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
-import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
-@ConditionalOnProperty(name ="db_flag", havingValue = "mysql")
-public class BookServiceImpl implements  BookService{
-
-
+@ConditionalOnProperty(name ="db_flag", havingValue = "redis")
+public class BookSerivceImplRedis implements BookService{
     @Autowired
-    private BookRepository bookRepository;
+    private RedisRepo bookRepository;
 
     @Override
     public String addBook(Book book) {
 
-        if(bookRepository.findBookByTitleAndAuthor(book.getTitle(),book.getAuthor())!=null)
+        if(bookRepository.findByTitleContainingIgnoreCaseOrAuthorContainingIgnoreCase(book.getTitle(),book.getAuthor())!=null)
         {
             throw new IllegalArgumentException("Book already exists");
         }
-      return bookRepository.addBook(book);
+         Book book1 =bookRepository.save(book);
+        return book1!=null ?"Book addded successfully":"Not able to add the book";
     }
 
     @Override
@@ -42,7 +40,9 @@ public class BookServiceImpl implements  BookService{
             throw new IllegalArgumentException("Book is not reserved");
         }
         book.setReserved(false);
-       return bookRepository.returnBook(id);
+        Book book1 = bookRepository.findById(id);
+
+        return book!=null ? "Book return successfully, Thank you. :)":"Something went wrong";
     }
 
     @Override
@@ -58,13 +58,14 @@ public class BookServiceImpl implements  BookService{
         }
 
         book.setReserved(true);
-        return bookRepository.reserveBook(id);
+
+        return addBook(book);
 
     }
 
     @Override
     public List<Book> searchBooks(String query) {
-        List<Book> listOfBooks = bookRepository.searchBooks(query);
+        List<Book> listOfBooks = bookRepository.findByTitleContainingIgnoreCase(query);
 
         System.out.println(listOfBooks);
         if(listOfBooks==null || listOfBooks.size()==0)
