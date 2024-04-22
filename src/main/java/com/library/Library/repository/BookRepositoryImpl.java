@@ -15,22 +15,37 @@ public class BookRepositoryImpl implements  BookRepository{
 
 
     @Override
-    public void addBook(Book book) {
+    public String addBook(Book book) {
 
         String query = "INSERT INTO books (title, author, reserved) VALUES (?,?,?)";
-        jdbcTemplate.update(query,book.getTitle(),book.getAuthor(),book.isReserved());
+       int rows = jdbcTemplate.update(query,book.getTitle(),book.getAuthor(),book.isReserved());
+        if (rows > 0) {
+           return "Book added successfully";
+        } else {
+            return "Not able to add the book";
+        }
     }
 
     @Override
-    public void returnBook(long bookId) {
+    public String returnBook(long bookId) {
         String sql = "UPDATE books SET reserved = FALSE WHERE id = ?";
-        jdbcTemplate.update(sql, bookId);
+        int rows = jdbcTemplate.update(sql, bookId);
+        if (rows > 0) {
+            return "Book return successfully, Thank you. :)";
+        } else {
+            return "Something went wrong.";
+        }
     }
 
     @Override
-    public void reserveBook(long bookId) {
+    public String reserveBook(long bookId) {
         String sql = "UPDATE books SET reserved = TRUE WHERE id = ?";
-        jdbcTemplate.update(sql, bookId);
+        int rows = jdbcTemplate.update(sql, bookId);
+        if (rows > 0) {
+            return "Book reserved successfully";
+        } else {
+           return "Not able to reserved the book";
+        }
     }
 
     @Override
@@ -56,5 +71,21 @@ public class BookRepositoryImpl implements  BookRepository{
                         rs.getString("author"),
                         rs.getBoolean("reserved")
                 ));
+    }
+
+    @Override
+    public Book findBookByTitleAndAuthor(String title, String author) {
+        String sql = "SELECT * FROM books WHERE title = ? AND author = ?";
+        try {
+            return jdbcTemplate.queryForObject(sql, new Object[]{title, author}, (rs, rowNum) ->
+                    new Book(
+                            rs.getLong("id"),
+                            rs.getString("title"),
+                            rs.getString("author"),
+                            rs.getBoolean("reserved")
+                    ));
+        } catch (Exception e) {
+            return null;
+        }
     }
 }
