@@ -1,4 +1,4 @@
-package com.library.Library;
+package com.library.Library.configurations;
 
 import com.library.Library.entities.Book;
 import org.springframework.context.annotation.Bean;
