@@ -17,27 +17,27 @@ public class BookController {
     @Autowired
     private BookService bookService;
 
-    @PostMapping("/add")
+    @PostMapping("")
     public ResponseEntity<String> addBook(@RequestBody Book book) {
         String resposne = bookService.addBook(book);
         return ResponseEntity.status(HttpStatus.OK).body(resposne);
     }
 
-    @PostMapping("/return/{id}")
-    public ResponseEntity<String> returnBook(@PathVariable long id) {
-       String resposnse = bookService.returnBook(id);
+    @PostMapping("/return/{returnId}")
+    public ResponseEntity<String> returnBook(@PathVariable long returnId) {
+       String resposnse = bookService.returnBook(returnId);
         return ResponseEntity.ok(resposnse);
     }
 
-    @PostMapping("/reserve/{id}")
-    public ResponseEntity<String> reserveBook(@PathVariable long id) {
-        String resposne = bookService.reserveBook(id);
+    @PostMapping("/reserve/{reserveId}")
+    public ResponseEntity<String> reserveBook(@PathVariable long reserveId) {
+        String resposne = bookService.reserveBook(reserveId);
         return ResponseEntity.ok(resposne);
     }
 
     @GetMapping("/search")
-    public ResponseEntity<List<Book>> searchBooks(@RequestParam("query") String query) {
-        List<Book> books = bookService.searchBooks(query);
+    public ResponseEntity<List<Book>> searchBooksByTitle(@RequestParam("query") String query) {
+        List<Book> books = bookService.searchBooksByTitle(query);
         return ResponseEntity.ok(books);
     }
 }

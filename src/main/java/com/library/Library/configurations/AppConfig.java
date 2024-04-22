@@ -8,23 +8,15 @@ import org.springframework.data.redis.connection.jedis.JedisConnectionFactory;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.serializer.GenericToStringSerializer;
 import org.springframework.data.redis.serializer.StringRedisSerializer;
+import redis.clients.jedis.Jedis;
 
 @Configuration
 public class AppConfig {
 
     @Bean
-    JedisConnectionFactory jedisConnectionFactory() {
-
-        return new JedisConnectionFactory();
+    public Jedis jedisConnectionFactory()
+    {
+           Jedis jedis = new Jedis("redis://localhost:6379");
+        return jedis;
     }
-
-    @Bean
-    public RedisTemplate<String, Book> redisTemplate(RedisConnectionFactory connectionFactory) {
-        RedisTemplate<String, Book> template = new RedisTemplate<>();
-        template.setConnectionFactory(connectionFactory);
-        template.setKeySerializer(new StringRedisSerializer());
-        template.setValueSerializer(new GenericToStringSerializer<>(Object.class));
-        return template;
-    }
-
 }

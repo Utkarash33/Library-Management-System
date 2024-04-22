@@ -63,7 +63,7 @@ public class BookServiceImpl implements  BookService{
     }
 
     @Override
-    public List<Book> searchBooks(String query) {
+    public List<Book> searchBooksByTitle(String query) {
         List<Book> listOfBooks = bookRepository.searchBooks(query);
 
         System.out.println(listOfBooks);

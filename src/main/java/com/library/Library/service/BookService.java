@@ -9,5 +9,5 @@ public interface BookService {
     String addBook(Book book);
     String returnBook(long id);
     String reserveBook(long id);
-    List<Book> searchBooks(String query);
+    List<Book> searchBooksByTitle(String query);
 }
