@@ -62,6 +62,7 @@ public class BookServiceImpl implements  BookService{
     public List<Book> searchBooks(String query) {
         List<Book> listOfBooks = bookRepository.searchBooks(query);
 
+        System.out.println(listOfBooks);
         if(listOfBooks==null || listOfBooks.size()==0)
         {
             throw new IllegalArgumentException("No book found with "+query);
