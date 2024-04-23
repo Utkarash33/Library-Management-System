@@ -10,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/books")
@@ -27,20 +28,18 @@ public class BookController {
         return ResponseEntity.status(HttpStatus.OK).body(resposne);
     }
 
-    @PostMapping("/return/{returnId}")
-    public ResponseEntity<String> returnBook(@PathVariable long returnId) {
+    @PutMapping("")
+    public ResponseEntity<String> processBookAction(@RequestBody Map<String, Object> requestBody) {
+        String action = (String) requestBody.get("action");
+        Long id = ((Number) requestBody.get("id")).longValue();
 
-        String resposnse = bookService.returnBook(returnId);
-        kafkaProducer.sendEvent("return");
-        return ResponseEntity.ok(resposnse);
+        String response =bookService.resolveRequestAction(id,action);
+
+        kafkaProducer.sendEvent(action);
+
+        return ResponseEntity.ok(response);
     }
 
-    @PostMapping("/reserve/{reserveId}")
-    public ResponseEntity<String> reserveBook(@PathVariable long reserveId) {
-        String resposne = bookService.reserveBook(reserveId);
-        kafkaProducer.sendEvent("reserve");
-        return ResponseEntity.ok(resposne);
-    }
 
     @GetMapping("")
     public ResponseEntity<List<Book>> searchBooksByTitle(@RequestParam("title") String query) {

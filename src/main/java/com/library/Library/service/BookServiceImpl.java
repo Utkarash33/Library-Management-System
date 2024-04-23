@@ -2,10 +2,8 @@ package com.library.Library.service;
 
 import com.library.Library.entities.Book;
 import com.library.Library.repository.BookRepository;
-import com.library.Library.repository.RedisRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
-import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -26,6 +24,24 @@ public class BookServiceImpl implements  BookService{
             throw new IllegalArgumentException("Book already exists");
         }
       return bookRepository.addBook(book);
+    }
+
+    @Override
+    public String resolveRequestAction(long id, String action)
+    {
+        String response;
+        switch (action) {
+            case "return":
+                response = returnBook(id);
+                break;
+            case "reserve":
+                response = reserveBook(id);
+                break;
+            default:
+                throw  new IllegalArgumentException("Unable to find the right action.");
+        }
+
+        return response;
     }
 
     @Override

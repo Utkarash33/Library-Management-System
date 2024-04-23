@@ -31,6 +31,24 @@ public class BookSerivceImplRedis implements BookService{
     }
 
     @Override
+    public String resolveRequestAction(long id, String action)
+    {
+        String response;
+        switch (action) {
+            case "return":
+                response = returnBook(id);
+                break;
+            case "reserve":
+                response = reserveBook(id);
+                break;
+            default:
+                throw  new IllegalArgumentException("Unable to find the right action.");
+        }
+
+        return response;
+    }
+
+    @Override
     public String returnBook(long id) {
         Book book = bookRepository.findBookById(id);
         if(book == null)
