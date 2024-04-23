@@ -53,7 +53,7 @@ public class BookSerivceImplRedis implements BookService{
         if (book.isReserved()) {
             throw new IllegalStateException("Book is already reserved");
         }
-        return bookRepository.reserveBook(book.getId())<=1l ? "Book return successfully, Thank you. :)":"Something went wrong";
+        return bookRepository.reserveBook(book.getId())<=1l ? "Book reserved successfully":"Something went wrong";
     }
 
     @Override

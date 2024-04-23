@@ -1,5 +1,6 @@
 package com.library.Library;
-
+import com.library.Library.configurations.CustomKafkaConsumer;
+import com.library.Library.configurations.CustomKafkaProducer;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 

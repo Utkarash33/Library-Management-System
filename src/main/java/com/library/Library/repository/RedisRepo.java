@@ -90,5 +90,13 @@ public class RedisRepo
         }
         return books;
     }
+     public long incremetReturnCount()
+     {
+        return jedis.hincrBy("count_return_reserves","return_count",1);
+     }
 
+    public long incremetReserveCount()
+    {
+        return jedis.hincrBy("count_return_reserves","reserve_count",1);
+    }
 }
